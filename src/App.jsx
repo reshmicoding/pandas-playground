@@ -1592,6 +1592,7 @@ export default function PandasPlayground() {
   const [codeOutput, setCodeOutput] = useState(null);
   const [quizScores, setQuizScores] = useState({});
   const [activeChapter, setActiveChapter] = useState(1);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const toastRef = useRef(null);
 
   const lesson = CURRICULUM.find(c => c.id === currentId);
@@ -1635,6 +1636,7 @@ export default function PandasPlayground() {
   function navigate(id, ch) {
     setCurrentId(id); setActiveTab("theory"); setCodeOutput(null);
     if (ch) setActiveChapter(ch);
+    setSidebarOpen(false);
   }
 
   function runCode() {
@@ -1687,6 +1689,7 @@ export default function PandasPlayground() {
   return (
     <div className="app">
       <div className="header">
+        <button className="menu-btn" onClick={() => setSidebarOpen(o => !o)}>☰</button>
         <div className="header-logo">Pandas Playground</div>
         <div className="chapter-pill">{chLabel}</div>
         <div className="streak">🔥 {streak}</div>
@@ -1698,7 +1701,8 @@ export default function PandasPlayground() {
       </div>
 
       <div className="body-area">
-        <nav className="sidebar">
+        {sidebarOpen && <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
+        <nav className={`sidebar ${sidebarOpen ? "sidebar-open" : ""}`}>
           {sidebarChapters.map((ch, i) => (
             <div key={ch}>
               {i > 0 && <div className="sidebar-divider"/>}
